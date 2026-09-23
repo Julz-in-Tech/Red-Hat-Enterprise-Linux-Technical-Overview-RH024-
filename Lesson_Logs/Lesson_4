@@ -1,0 +1,42 @@
+# The RHEL Command Line Assistant
+
+Red Hat Enterprise Linux includes a dedicated Command Line Assistant (powered by RHEL Lightspeed) that brings AI-driven guidance directly into the terminal. It translates natural language queries into exact Linux commands, system explanations, and troubleshooting steps.
+
+
+## Core Purpose
+
+The Assistant acts as an interactive bridge between natural language instructions and technical terminal execution.
+
+```
+[ Natural Language Request ] ➔ [ Command Line Assistant ] ➔ [ Validated RHEL Commands ] ➔ [ Terminal Execution ]
+
+```
+
+## Key Capabilities
+
+* **Natural Language Querying:** Translates user requests like "how do I restrict SSH access to a specific user" into precise `sshd_config` edits and `systemctl` syntax.
+* **Log & Error Analysis:** Parses terminal output and log files to identify core causes of system errors and suggest remediation commands.
+* **Interactive Guidance:** Provides step-by-step administration workflows directly inside the shell without needing external browser searches.
+
+
+## Operation Modes
+
+The Command Line Assistant operates across two primary infrastructure environments.
+
+```
+[ Connected Systems ] ➔ [ Red Hat Cloud / Hybrid Console ] ➔ [ Direct Terminal Output ]
+
+```
+
+```
+[ Air-Gapped / Offline ] ➔ [ Podman Local Containers ] ➔ [ Offline Local Model Execution ]
+
+```
+
+### Connected Mode
+
+Connects directly to Red Hat cloud services to retrieve real-time documentation, best practices, and targeted troubleshooting recommendations.
+
+### Offline Mode
+
+Deploys via local container images managed by Podman for air-gapped enterprise environments where external internet connectivity is restricted.
