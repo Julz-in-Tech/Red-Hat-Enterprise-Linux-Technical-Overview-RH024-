@@ -1,0 +1,49 @@
+### Linux distributions
+
+>A complete operating system built around the Linux Kernel.
+
+## Linux Kernel
+
+> This is the central foundation for all Linux distributions that every Linux system relies on.
+
+# 01 — The Red Hat Linux Ecosystem & Lineage
+
+The Red Hat Linux ecosystem moves software through a 4-stage pipeline, from community-driven upstream projects to enterprise-grade, supported software.
+
+## The 4 Pipeline Stages
+
+**1 Open Source Community Projects** 
+Independent, community-driven projects (e.g., Linux Kernel, GNOME, Systemd) where new ideas are created and code is contributed.
+
+**2 Fedora : The rapid-innovation testing ground**
+ Brings together features from upstream open-source projects into a complete, modern desktop/server OS.
+
+**3 CentOS Stream : The **continuously delivered preview** 
+for upcoming minor releases of RHEL. Serves as the upstream development target where community & Red Hat engineers test RHEL code.
+
+**4 Red Hat Enterprise Linux (RHEL)** 
+The production-grade operating system. Fully tested, hardened, stable, and commercially supported for critical enterprise workloads.
+
+## Key Takeaways for System Administrators
+
+**Upstream Flow:** Code moves from left to right. Contributions flow back upstream to community projects to keep open source healthy.
+**CentOS Stream vs. Old CentOS:** CentOS Stream is upstream of RHEL (a rolling preview of RHEL's future state), whereas the legacy CentOS Linux was downstream (a re-build of RHEL after release).
+**Enterprise Stability:** RHEL values stability, security, and long-term support (LTS) over cutting-edge features. New technologies are vetted in Fedora and CentOS Stream long before hitting RHEL.
+
+## Package Manager
+
+> RHEL, CentOS Stream, and Fedora all make use of the same rpm package manager.
+
+## Open Source
+
+> Red Hat both uses and contributes back to open source, strengthening the Linux ecosystem.
+
+## Distro Differences
+
+> The configuration and release schedules can vary between different Linux distributions.
+
+## Conclusion
+
+> Red Hat offers the no cost developer subscription for individuals. You get up-to 16 systems, all updates and self-service support. It is meant for non production use.
+
+> Red Hat releases new major versions every years and Leap is the tool used for upgrades that makes jumping to the next big version smooth and safe.
