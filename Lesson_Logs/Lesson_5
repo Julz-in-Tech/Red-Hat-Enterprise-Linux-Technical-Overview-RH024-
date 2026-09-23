@@ -1,0 +1,80 @@
+## Linux Directories Explained
+
+# The Filesystem Hierarchy Standard (FHS)
+
+Linux does not use drive letters like Windows (`C:\`, `D:\`). Everything in Linux starts from a single root directory, represented by a forward slash `/`. All files, directories, virtual hardware interfaces, and mounted drives branch out from this single root.
+
+
+## The Root Directory (`/`)
+
+The absolute top level of the entire file system hierarchy. Every file and directory stems from here.
+
+```
+[ / Root Directory ] ➔ [ Subdirectories ] ➔ [ Files & System Data ]
+
+```
+
+## Core System & Binary Directories
+
+These directories hold the essential programs and binaries required for the operating system to boot and run.
+
+```
+[ / ] ➔ [ /bin & /sbin ] ➔ [ Core System Executables ]
+
+```
+
+### Essential Directories
+
+* `/bin` and `/sbin` store primary command-line binaries and administrative commands like `ls`, `cp`, `ip`, and `systemctl` (in modern RHEL, these are symlinked to `/usr/bin` and `/usr/sbin`).
+* `/boot` contains the Linux kernel, initial RAM disk images (initramfs), and GRUB bootloader files needed to boot the OS.
+* `/lib` and `/lib64` hold shared code libraries required by system binaries to execute properly.
+
+
+## User & Variable Data Directories
+
+System users, applications, and dynamic processes read and write data across these isolated structures.
+
+```
+[ / ] ➔ [ /home & /var ] ➔ [ User Files & Active Log Data ]
+
+```
+
+### Essential Directories
+
+* `/home` contains personal home directories for standard users (e.g., `/home/john`), housing individual configurations and personal files.
+* `/root` is the dedicated home directory for the administrative superuser (`root`), kept separate from standard user directories on `/home`.
+* `/var` stores variable data that changes constantly during system operation, such as log files (`/var/log`), mail queues, and database files.
+* `/tmp` provides temporary file storage accessible to all applications; files here are automatically cleared on reboot or periodic cleanup.
+
+
+## Configuration & System Software Directories
+
+Administrative settings and secondary software packages live within these dedicated areas.
+
+```
+[ / ] ➔ [ /etc & /usr ] ➔ [ System Configurations & Application Files ]
+
+```
+
+### Essential Directories
+
+* `/etc` houses all system-wide configuration files and plain-text settings (e.g., `/etc/fstab`, `/etc/passwd`, `/etc/ssh/sshd_config`).
+* `/usr` holds user binaries, documentation, and read-only system software installed by the package manager (`/usr/bin`, `/usr/share/doc`).
+* `/opt` reserved for optional or third-party add-on software packages that do not follow standard package installation paths.
+
+
+## Virtual & Hardware Directories
+
+Linux treats hardware, devices, and kernel processes as files through virtual filesystems created in RAM at runtime.
+
+```
+[ Kernel Memory ] ➔ [ /proc & /sys ] ➔ [ System & Hardware State ]
+
+```
+
+### Essential Directories
+
+* `/dev` contains special device files representing connected hardware components (e.g., `/dev/sda` for hard drives, `/dev/null` for data disposal).
+* `/proc` a virtual filesystem containing active process information and kernel parameters rendered directly from memory.
+* `/sys` a virtual filesystem exposing hardware parameters, driver information, and device attributes to the operating system.
+* `/mnt` and `/media` temporary mount points used by administrators to attach external file systems, network drives, or removable media.
