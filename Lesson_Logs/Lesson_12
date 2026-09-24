@@ -1,0 +1,84 @@
+# Managing System Startup Services with Systemd
+
+Systemd is the default system and service manager for Red Hat Enterprise Linux. It controls how the operating system boots, initializes hardware, manages background processes (daemons), and handles system shutdown operations.
+
+---
+
+## Systemd Architecture and Unit Files
+
+Systemd organizes system resources into **units**, which are defined by configuration files ending in specific suffixes.
+
+```
+[ Systemd Initialization ] ➔ [ Load Unit Files: /etc/systemd/system/ ] ➔ [ Manage Targets & Services ]
+
+```
+
+### Primary Unit Types
+
+* **Service Units (`.service`):** Control background daemons and applications (e.g., `sshd.service`, `httpd.service`).
+* **Target Units (`.target`):** Group multiple units together to define system state runlevels (e.g., `multi-user.target`, `graphical.target`).
+* **Socket Units (`.socket`):** Network or IPC sockets that enable socket-based service activation.
+* **Mount Units (`.mount`):** Manage filesystem mount points automatically monitored by systemd.
+
+---
+
+## Managing Services with `systemctl`
+
+The `systemctl` utility is the primary tool used by system administrators to query, start, stop, and configure services.
+
+```
+[ Admin Command ] ➔ [ systemctl start/stop/enable ] ➔ [ Service State Updated ]
+
+```
+
+### Essential Service Management Commands
+
+* `systemctl status service_name` checks the current running state, memory usage, and recent log outputs for a service.
+* `systemctl start service_name` starts a service immediately for the current runtime session.
+* `systemctl stop service_name` stops a running service immediately.
+* `systemctl restart service_name` restarts a running service (useful for applying configuration file updates).
+* `systemctl enable service_name` configures a service to start automatically during system boot.
+* `systemctl disable service_name` stops a service from starting automatically at system boot.
+* `systemctl enable --now service_name` enables a service at boot and starts it immediately in one command.
+
+---
+
+## System Boot Targets and Runlevels
+
+Systemd uses targets to bring the system into a specific operational mode upon boot.
+
+```
+[ Boot Process ] ➔ [ Default Target Selected ] ➔ [ Dependencies Started ] ➔ [ System Ready ]
+
+```
+
+### Core System Targets
+
+* `multi-user.target` sets up a full non-graphical, console-based multi-user environment (standard for headless enterprise servers).
+* `graphical.target` sets up a full multi-user environment with a graphical desktop interface (GNOME).
+* `rescue.target` boots into a single-user minimal maintenance environment with essential filesystems mounted.
+
+### Target Operations
+
+* `systemctl get-default` displays the target unit configured to launch on system boot.
+* `systemctl set-default graphical.target` sets the default boot target to the graphical desktop environment.
+* `systemctl isolate multi-user.target` switches the current system state immediately to the text-based multi-user target without rebooting.
+
+---
+
+## Analyzing Logs with `journalctl`
+
+Systemd includes a centralized logging facility (`systemd-journald`) that collects messages from the kernel, services, and stdout/stderr outputs.
+
+```
+[ Kernel / Services ] ➔ [ systemd-journald ] ➔ [ journalctl Query ] ➔ [ Filtered Output ]
+
+```
+
+### Log Inspection Commands
+
+* `journalctl` displays all system logs starting from the oldest recorded entry.
+* `journalctl -u service_name` filters log messages exclusively for a specified service (e.g., `journalctl -u sshd`).
+* `journalctl -f` streams new log entries live as they are generated in real-time.
+* `journalctl -b` displays only logs generated during the current system boot cycle.
+* `journalctl -p err` filters logs to show only entries marked with error severity or higher.
