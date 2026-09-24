@@ -1,0 +1,58 @@
+# Red Hat Insights Image Builder
+
+Red Hat Insights Image Builder is a cloud-hosted service on the Red Hat Hybrid Cloud Console that allows system administrators to create custom, tailored RHEL operating system images across cloud providers, virtualized environments, and bare-metal hardware.
+
+---
+
+## Core Purpose
+
+Instead of manually installing a generic RHEL image and running post-installation scripts to configure settings, Image Builder automates the creation of pre-configured OS images tailored to specific deployment targets.
+
+```
+[ Custom Blueprint Configuration ] ➔ [ Insights Image Builder ] ➔ [ Optimized Output (AWS / Azure / VMware / ISO) ]
+
+```
+
+---
+
+## Key Features & Capabilities
+
+* **Blueprint Definitions:** Define custom package lists, users, SSH keys, network configurations, and storage layouts before generating the OS image.
+* **Multi-Cloud Target Support:** Builds native image formats directly ready for deployment across major platforms.
+* **Direct Cloud Push:** Automatically uploads generated machine images directly into cloud provider accounts (e.g., AWS AMI or Azure Managed Disks).
+* **Security & Compliance Integration:** Applies OpenSCAP compliance profiles directly during image creation to ensure built images comply with security baselines (such as CIS or PCI-DSS) out of the box.
+
+---
+
+## Supported Output Formats
+
+Image Builder generates image files for diverse infrastructure requirements:
+
+* **Cloud Images:** AWS Amazon Machine Image (`.ami`), Microsoft Azure VHD, Google Cloud Platform (`.tar.gz`).
+* **Virtualization:** VMware vSphere (`.vmdk`), KVM / QEMU (`.qcow2`).
+* **Bare-Metal & Physical:** Bootable Installer ISOs, Bare Metal RAW images.
+* **Edge & Containers:** Bootc / Ostree images for RHEL for Edge deployments.
+
+---
+
+## Web UI vs On-Premises Command Line
+
+Image Builder can be operated as a managed service or installed locally on a RHEL host:
+
+```
+[ Red Hat Hybrid Cloud Console (console.redhat.com) ] ➔ Hosted Cloud Execution
+
+```
+
+```
+[ Local RHEL Host (composer-cli) ] ➔ Local On-Premises Execution
+
+```
+
+### Managed Service (Red Hat Insights)
+
+Accessible directly via `console.redhat.com`. Managed by Red Hat, meaning builds run in cloud infrastructure without consuming local system resources.
+
+### Local Tooling (`composer-cli` / `osbuild`)
+
+Installed locally using the `osbuild-composer` package. Used for air-gapped or restricted environments where images must be generated on local hardware without internet access.
