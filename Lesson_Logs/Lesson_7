@@ -1,0 +1,87 @@
+# Editing Files with Vim
+
+Vim (Vi IMproved) is the default, ubiquitous command-line text editor found across almost all enterprise Linux distributions. Because it works without a graphical user interface, knowing how to edit configuration files with Vim is a critical core competency for system administration.
+
+---
+
+## The Modal Editor Concept
+
+Unlike standard text editors, Vim uses **modes**. Keys perform different actions depending on which mode is currently active.
+
+```
+[ Command Mode (Default) ] ──( Press i )──> [ Insert Mode ]
+             ▲                                   │
+             │                                   │
+       ( Press Esc ) ◄───────────────────────────┘
+             │
+        ( Type : )
+             ▼
+  [ Last-Line / Exec Mode ]
+
+```
+
+### Primary Modes
+
+* **Command Mode (Normal):** The default mode upon opening a file. Used for navigation, deleting, copying, and pasting text.
+* **Insert Mode:** Used for typing and editing text directly inside the file.
+* **Last-Line (Exec) Mode:** Entered by typing `:`, used for saving, exiting, searching, and setting editor options.
+
+---
+
+## Basic Workflow: Open, Edit, Save, and Exit
+
+Opening and modifying a file follows a strict sequential process.
+
+```
+[ vim file.txt ] ➔ [ Command Mode ] ➔ [ i to Edit ] ➔ [ Esc to Finish ] ➔ [ :wq to Save ]
+
+```
+
+### Essential Commands
+
+* `vim filename` opens or creates a file for editing.
+* Press `i` to enter **Insert Mode** at the cursor position.
+* Press `Esc` to exit Insert Mode and return to **Command Mode**.
+* Type `:w` in Command Mode to save (write) changes without exiting.
+* Type `:q` to quit (fails if there are unsaved changes).
+* Type `:wq` or `:x` to save changes and exit.
+* Type `:q!` to force quit and discard all unsaved changes.
+
+---
+
+## Text Manipulation in Command Mode
+
+Fast editing in Vim is done in **Command Mode** using quick keyboard shortcuts without switching to Insert Mode.
+
+```
+[ Cursor on Line ] ➔ [ Command Shortcut (dd, yy, u) ] ➔ [ Action Executed ]
+
+```
+
+### Quick Commands
+
+* `x` deletes a single character under the cursor.
+* `dd` deletes (cuts) the current entire line.
+* `3dd` deletes 3 lines starting from the cursor position.
+* `yy` copies (yanks) the current line.
+* `p` pastes copied or cut text below the cursor position.
+* `u` undoes the last action.
+* `Ctrl + r` redoes the last undone action.
+
+---
+
+## Searching Text Inside Vim
+
+Searching allows rapid navigation through large configuration files like `/etc/ssh/sshd_config`.
+
+```
+[ Command Mode ] ➔ [ /search_term ] ➔ [ Jump to Match (n / N) ]
+
+```
+
+### Search Navigation
+
+* `/pattern` searches forward for a word or phrase.
+* `?pattern` searches backward for a word or phrase.
+* Press `n` to jump to the next matching result.
+* Press `N` to jump to the previous matching result.
