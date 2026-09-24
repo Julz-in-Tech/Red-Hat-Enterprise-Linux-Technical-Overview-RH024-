@@ -1,0 +1,78 @@
+# Basic File Management in Linux
+
+File management is a foundational skill in Linux administration. Every object in Linux is treated as a file, and managing these files efficiently from the command line is essential for operating RHEL systems.
+
+---
+
+## Path Navigation: Absolute vs Relative
+
+Navigating the filesystem requires specifying where a file or directory is located.
+
+```
+[ Root / Absolute Path ] ➔ /var/log/messages
+
+```
+
+```
+[ Current Directory ] ➔ ./messages  OR  ../log/messages
+
+```
+
+### Path Types
+
+* **Absolute Paths:** Always start from the root directory `/` and provide the full address regardless of where you are currently located (e.g., `/etc/sysconfig/network-scripts`).
+* **Relative Paths:** Start from your current working directory using `.` (current directory) or `..` (parent directory) as a reference point (e.g., `cd ../bin`).
+
+---
+
+## Essential File Creation & Viewing Tools
+
+Linux provides specific commands to create, view, and inspect file contents without opening a heavy text editor.
+
+```
+[ Input File ] ➔ [ cat / less / head / tail ] ➔ [ Terminal Display ]
+
+```
+
+### Key Management Commands
+
+* `touch filename` creates a new empty file or updates the timestamp of an existing file.
+* `mkdir dirname` creates a new directory (`mkdir -p path/to/dir` creates parent directories as needed).
+* `cat filename` displays the entire contents of a file directly to stdout.
+* `less filename` opens an interactive pager for scrolling through large text files (`q` to quit).
+* `head -n 10 filename` displays the first 10 lines of a file.
+* `tail -n 10 filename` displays the last 10 lines of a file (`tail -f` streams live log updates).
+
+---
+
+## File Operations: Copying, Moving, and Removing
+
+Modifying file locations and lifecycle requires commands that act on files and directory trees.
+
+```
+[ Source File ] ➔ [ cp / mv / rm ] ➔ [ Destination / Removal ]
+
+```
+
+### Core Manipulations
+
+* `cp source destination` copies files from one location to another (`cp -r` recursively copies entire directory trees).
+* `mv source destination` moves or renames files and directories within the filesystem.
+* `rm filename` permanently removes a file (`rm -r` recursively removes directories; `rm -rf` forces removal without prompting).
+
+---
+
+## File Globbing and Wildcards
+
+Wildcards allow administrators to target multiple files matching a specific pattern in a single command execution.
+
+```
+[ Pattern: *.log ] ➔ [ Shell Matching ] ➔ [ Targets: app.log, error.log, system.log ]
+
+```
+
+### Common Wildcard Characters
+
+* `*` matches zero or more characters (e.g., `rm *.txt` targets all files ending in `.txt`).
+* `?` matches exactly one character (e.g., `ls file?.txt` targets `file1.txt`, `fileA.txt`).
+* `[a-z]` matches any single character within a defined range or set.
