@@ -7,18 +7,29 @@ A public repository documenting my hands-on progress, technical notes, and comma
 ## 📂 Repository Structure
 
 
-```
+# 📂 Repository Structure
 
+```text
 Red-Hat-Enterprise-Linux/
 ├── Lesson_Logs/
-│   ├── Lesson_1     # Linux Distributions & RHEL 
-│   ├── Lesson_2     # Introduction to the Shell
-│   ├── Lesson_3     # Linux Documentation Systems
-│   ├── Lesson_4     # Command Line Assistant (RHE
-│   └── Lesson_5     # Linux Directories & 
-└── README.md        # Repository Overview & Index
-
-```
+│   ├── Lesson_1      # Linux Distributions & RHEL Lineage
+│   ├── Lesson_2      # Introduction to the Shell
+│   ├── Lesson_3      # Linux Documentation Systems
+│   ├── Lesson_4      # Command Line Assistant (RHEL Lightspeed)
+│   ├── Lesson_5      # Linux Directories & Filesystem Hierarchy Standard (FHS)
+│   ├── Lesson_6      # Basic File Management
+│   ├── Lesson_7      # Editing Files with Vim
+│   ├── Lesson_8      # Organizing Local Users and Groups
+│   ├── Lesson_9      # File Permissions
+│   ├── Lesson_10     # Managing Software and Updates
+│   ├── Lesson_11     # Managing Networking
+│   ├── Lesson_12     # Managing System Startup Services with Systemd
+│   ├── Lesson_13     # Deploying an Application Runtime
+│   ├── Lesson_14     # Using Image Mode with Bootc
+│   ├── Lesson_15     # Insights Image Builder
+│   ├── Lesson_16     # Insights Vulnerability Management
+│   └── Lesson_17     # Managing Systems with the RHEL Web Console
+└── README.md         # Repository Overview & Index
 
 ---
 
