@@ -1,0 +1,81 @@
+# File Permissions in Linux
+
+Linux uses a multi-tiered security model to control access to files and directories. Every filesystem object has explicit read, write, and execute permissions assigned across three distinct access classes.
+
+---
+
+## Permission Ownership Classes
+
+Permissions are assigned to three specific entities for every file and directory on the system.
+
+```
+[ User (u) Owner ] ➔ [ Group (g) Owner ] ➔ [ Other (o) World ]
+
+```
+
+### Access Categories
+
+* **User (`u`):** The individual account that owns the file.
+* **Group (`g`):** The group that owns the file; all users in this group share these access rights.
+* **Other (`o`):** Everyone else on the system who is not the owner and not a member of the group.
+
+---
+
+## The Three Basic Permission Types
+
+The operating system evaluates access rights differently depending on whether the target is a regular file or a directory.
+
+```
+[ Read (r / 4) ] + [ Write (w / 2) ] + [ Execute (x / 1) ]
+
+```
+
+### Files vs Directories Behavior
+
+* **Read (`r` / `4`):** On files, allows reading contents. On directories, allows listing file names inside (`ls`).
+* **Write (`w` / `2`):** On files, allows modifying contents. On directories, allows creating, renaming, or deleting files inside.
+* **Execute (`x` / `1`):** On files, allows executing scripts or binary programs. On directories, allows entering the directory (`cd`) and accessing file metadata.
+
+---
+
+## Symbolic vs Octal Permission Notation
+
+Permissions are represented either symbolically as characters (`rwxr-xr--`) or numerically as three octal digits (`754`).
+
+```
+[ Symbol: r w x  |  r - x  |  r - - ] ➔ [ Octal: 4+2+1  |  4+0+1  |  4+0+0 ] ➔ [ Mode: 754 ]
+
+```
+
+### Octal Value Calculation
+
+* `4` = Read (`r`)
+* `2` = Write (`w`)
+* `1` = Execute (`x`)
+* `0` = No permission (`-`)
+
+### Common Permission Combinations
+
+* `700` (`rwx------`): Full control for the owner only; no access for group or others.
+* `644` (`rw-r--r--`): Standard file permission; owner can read and write, everyone else can only read.
+* `755` (`rwxr-xr-x`): Standard executable/directory permission; owner has full control, everyone else can read and execute/enter.
+
+---
+
+## Managing Permissions and Ownership
+
+Commands used by administrators to modify permission bits and assigned ownership on the filesystem.
+
+```
+[ Target File ] ➔ [ chmod / chown / chgrp ] ➔ [ Updated Access Rights ]
+
+```
+
+### Core Administrative Tools
+
+* `chmod 755 filename` changes permissions using octal notation.
+* `chmod u+x filename` adds execute permission specifically for the user owner.
+* `chmod -R g+w directory` recursively adds write permissions for the group across an entire directory tree.
+* `chown john filename` changes the individual user ownership of a file to `john`.
+* `chown john:developers filename` changes both the user owner (`john`) and group owner (`developers`) simultaneously.
+* `chgrp developers filename` changes only the group owner of a file.
