@@ -1,0 +1,60 @@
+# Red Hat Insights Vulnerability Management
+
+Red Hat Insights Vulnerability Management is a cloud-based security service integrated into the Red Hat Hybrid Cloud Console. It continuously scans connected Red Hat Enterprise Linux infrastructure to identify, prioritize, and remediate Common Vulnerabilities and Exposures (CVEs).
+
+---
+
+## Core Operational Purpose
+
+Instead of manually running local security scanners across every server, Insights continuously monitors your inventory against Red Hat’s official security database.
+
+```
+[ Connected RHEL Hosts ] ➔ [ Insights Client Telemetry ] ➔ [ Red Hat Security Database ] ➔ [ CVE Risk Analysis & Playbooks ]
+
+```
+
+---
+
+## Key Capabilities & Features
+
+* **Continuous Automated Scanning:** Utilizes the lightweight `insights-client` daemon to report system state metadata without impacting production performance.
+* **Red Hat Security Data Integration:** Matches system packages directly against Red Hat Product Security advisories and CVSS (Common Vulnerability Scoring System) scores.
+* **Business Risk Prioritization:** Categorizes vulnerabilities based on severity, exploitability, and whether the affected service is actively running on the host.
+* **Automated Remediation:** Generates custom Red Hat Ansible Automation Platform playbooks directly from the console to patch identified vulnerabilities across groups of systems.
+
+---
+
+## CVE Prioritization Framework
+
+Insights evaluates CVEs using both standard metrics and environmental factors to help administrators focus on critical threats first.
+
+```
+[ Detected CVE ] ➔ [ CVSS Score + Exploit Status + System Context ] ➔ [ Adjusted Priority Level ]
+
+```
+
+### Risk Factors Evaluated
+
+* **CVSS Base Score:** The universal severity rating of the vulnerability (Low, Moderate, Important, Critical).
+* **Security Rule Associations:** Highlighting issues that Red Hat Product Security has flagged with specific threat intelligence or active exploits in the wild.
+* **Executive Reports:** Generates exportable PDF/CSV reports tailored for security auditors and executive stakeholders to demonstrate compliance.
+
+---
+
+## Remediation Workflow
+
+Remediating vulnerabilities using Insights follows a streamlined multi-step process.
+
+```
+[ Select CVEs / Systems ] ➔ [ Generate Ansible Playbook ] ➔ [ Execute via Automation Platform or CLI ] ➔ [ System Patched ]
+
+```
+
+### Execution Options
+
+1. **Direct Execution:** Run playbooks directly on systems registered via Red Hat Satellite or Cloud Connector.
+2. **Manual Playbook Download:** Download the generated `.yml` Ansible playbook from the console and run it locally:
+```bash
+ansible-playbook -i inventory insights-remediation-playbook.yml
+
+```
