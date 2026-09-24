@@ -1,0 +1,73 @@
+# Organizing Local Users and Groups
+
+User and group management is a fundamental security control in Red Hat Enterprise Linux. Managing access ensures that system administrators and applications have only the permissions required to perform their tasks, following the principle of least privilege.
+
+---
+
+## User and Group Identity Files
+
+Linux tracks users and groups using plain-text system configuration files located in `/etc/`.
+
+```
+[ Security Request ] ➔ [ Lookups: /etc/passwd & /etc/group ] ➔ [ Password Check: /etc/shadow ]
+
+```
+
+### Critical Identity Files
+
+* `/etc/passwd` stores user account metadata, including username, UID, primary GID, home directory, and default shell.
+* `/etc/shadow` holds encrypted user passwords and password expiration settings (readable only by the root account).
+* `/etc/group` defines local group names, GIDs, and static member lists.
+
+---
+
+## Primary vs Secondary Groups
+
+Every local Linux user belongs to exactly one primary group and zero or more secondary (supplementary) groups.
+
+```
+[ User Account ] ➔ [ Primary Group (Owner Default) ] + [ Secondary Groups (Access Rights) ]
+
+```
+
+### Group Classifications
+
+* **Primary Group:** Automatically assigned when a file or directory is created by the user. On RHEL, creating a user automatically creates a User Private Group (UPG) with the same name and ID.
+* **Secondary Groups:** Used to grant additional access rights to specific shared resources, such as project directories or administrative capabilities.
+
+---
+
+## Managing Local Users
+
+Standard commands allow administrators to create, modify, and delete user accounts.
+
+```
+[ Admin Task ] ➔ [ useradd / usermod / userdel ] ➔ [ Updates to /etc/passwd & /etc/shadow ]
+
+```
+
+### Key User Commands
+
+* `useradd username` creates a new local user account with default settings.
+* `useradd -m -g developers -s /bin/bash john` creates user `john`, assigns primary group `developers`, sets the shell to `/bin/bash`, and creates a home directory.
+* `usermod -aG wheel john` appends user `john` to the secondary administrative group `wheel`.
+* `passwd username` sets or changes the password for a user account.
+* `userdel -r username` removes a user account along with their home directory and mail spool.
+
+---
+
+## Managing Local Groups
+
+Group management utilities streamline access control by bundling permissions together rather than managing users individually.
+
+```
+[ Group Creation ] ➔ [ groupadd / groupmod / groupdel ] ➔ [ Updates to /etc/group ]
+
+```
+
+### Key Group Commands
+
+* `groupadd groupname` creates a new local group.
+* `groupmod -n new_name old_name` renames an existing group.
+* `groupdel groupname` removes a group (cannot delete a user's primary group).
+* `gpasswd -d username groupname` removes a user from a specific secondary group.
