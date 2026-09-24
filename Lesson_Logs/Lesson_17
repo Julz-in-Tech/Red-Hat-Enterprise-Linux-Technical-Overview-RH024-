@@ -1,0 +1,87 @@
+# Managing Systems with the RHEL Web Console (Cockpit)
+
+The RHEL Web Console (powered by the open-source **Cockpit** project) provides an interactive, web-based graphical interface for administering Red Hat Enterprise Linux servers. It allows both junior and senior administrators to monitor performance, manage services, and configure storage without leaving the web browser.
+
+---
+
+## Core Purpose & Architecture
+
+The Web Console acts as a lightweight management layer that renders native system APIs directly into an intuitive web interface.
+
+```
+[ Web Browser ] ➔ [ HTTPS (Port 9090) ] ➔ [ Cockpit Socket Service ] ➔ [ Native System Utilities ]
+
+```
+
+### Key Architectural Characteristics
+
+* **Zero Abstraction Layer:** Actions taken in the Web Console execute the exact same underlying system commands (`systemctl`, `podman`, `dnf`, `nmcli`) as if typed into a terminal.
+* **Non-Intrusive:** It does not run continuous background daemons when inactive, preserving server memory and system resources.
+* **Terminal Coexistence:** Multiple admins can work simultaneously; changes made in the Web Console reflect instantly in the terminal and vice versa.
+
+---
+
+## Enabling and Accessing the Web Console
+
+The Web Console service is included in RHEL by default and is managed via systemd and firewalld.
+
+```
+[ enable cockpit.socket ] ➔ [ firewall-cmd --add-service=cockpit ] ➔ [ Access https://server-ip:9090 ]
+
+```
+
+### Quick Setup Steps
+
+1. Enable and start the web console socket:
+```bash
+sudo systemctl enable --now cockpit.socket
+
+```
+
+
+2. Open the network port in the local firewall:
+```bash
+sudo firewall-cmd --add-service=cockpit --permanent
+sudo firewall-cmd --reload
+
+```
+
+
+3. Access the console in a browser at `https://<server-ip>:9090` using standard Linux system user credentials.
+
+---
+
+## Key Administration Capabilities
+
+The Web Console provides structured tabs for managing core server operations.
+
+```
+[ Web Console Dashboard ] ➔ [ Metrics / Storage / Networking / Containers / Terminal ]
+
+```
+
+### Primary Management Tabs
+
+* **Overview & System Health:** Live performance metrics for CPU, RAM, Disk I/O, and Network traffic, plus system hardware details and reboot controls.
+* **Storage Management:** Create and extend logical volumes (LVM), format partitions, inspect RAID arrays, and monitor disk space usage.
+* **Networking:** Configure network connections, set static IP addresses, inspect firewall rules, and manage bonding or bridging.
+* **Accounts & Services:** Create local users, manage groups, add SSH keys, and start, stop, or enable systemd background services.
+* **Podman Containers:** Download container images, launch new containers, inspect running pods, and manage container resource limits.
+* **Integrated Terminal:** Full-featured, embedded terminal session inside the browser for executing direct shell commands without requiring SSH software.
+
+---
+
+## Multi-Host Management
+
+The Web Console can manage multiple remote RHEL hosts from a single single-pane-of-glass interface.
+
+```
+[ Primary Cockpit Host ] ──( SSH Connection )──> [ Remote RHEL Server 1 ]
+                                            └──> [ Remote RHEL Server 2 ]
+
+```
+
+### Centralized Access
+
+* Administrators can log into one primary Web Console instance and add secondary remote servers using standard SSH credentials.
+* Allows monitoring resource utilization and executing updates across a pool of servers without navigating multiple browser windows.
