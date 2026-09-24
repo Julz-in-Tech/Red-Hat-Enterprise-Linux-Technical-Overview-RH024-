@@ -1,0 +1,114 @@
+# Deploying an Application Runtime
+
+Deploying an application on Red Hat Enterprise Linux involves preparing the environment, installing the required runtime dependencies, configuring system security controls, and persisting the process using Systemd.
+
+---
+
+## 1. Preparing the System and Installing the Runtime
+
+Before running an application, the underlying language runtime (e.g., Python, Node.js, PHP) must be installed via the DNF package manager.
+
+```
+[ DNF Package Manager ] ➔ [ Install Runtime & Web Server ] ➔ [ Deploy App Source Code ]
+
+```
+
+### Installation Workflow
+
+* `sudo dnf install python3 python3-pip -y` installs the Python 3 runtime engine and its associated package installer.
+* Create a dedicated, non-privileged system user to execute the application processes securely:
+```bash
+sudo useradd -r -s /sbin/nologin appuser
+
+```
+
+
+* Store the application source files in a dedicated directory, such as `/opt/myapp` or `/var/www/myapp`.
+
+---
+
+## 2. Managing Network Security and SELinux
+
+Enterprise Linux blocks incoming network traffic by default using `firewalld` and restricts process actions using Security-Enhanced Linux (SELinux).
+
+```
+[ Incoming Request ] ➔ [ Firewalld Rule Check ] ➔ [ SELinux Context Check ] ➔ [ App Port ]
+
+```
+
+### Firewall Configuration
+
+* Allow incoming traffic through the required application port (e.g., port 8080):
+```bash
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+
+```
+
+
+
+### SELinux Configuration
+
+* Grant the web server or application runtime permission to bind to network ports or access files:
+```bash
+sudo semanage port -a -t http_port_t -p tcp 8080
+sudo restorecon -Rv /opt/myapp
+
+```
+
+
+
+---
+
+## 3. Persisting the Application with a Systemd Service
+
+To ensure the application starts automatically on boot, runs in the background, and restarts if it crashes, define a custom Systemd unit file.
+
+```
+[ Application Script ] ➔ [ Systemd Unit Configuration ] ➔ [ Managed Background Daemon ]
+
+```
+
+### Creating the Service Unit File
+
+Create a new unit file at `/etc/systemd/system/myapp.service`:
+
+```ini
+[Unit]
+Description=Simple Python Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=appuser
+WorkingDirectory=/opt/myapp
+ExecStart=/usr/bin/python3 -m http.server 8080
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+### Enabling and Verifying the Deployment
+
+* Reload the systemd manager configuration to recognize the new service:
+```bash
+sudo systemctl daemon-reload
+
+```
+
+
+* Enable and start the service in a single command:
+```bash
+sudo systemctl enable --now myapp.service
+
+```
+
+
+* Verify the runtime deployment state:
+```bash
+systemctl status myapp.service
+curl http://localhost:8080
+
+```
