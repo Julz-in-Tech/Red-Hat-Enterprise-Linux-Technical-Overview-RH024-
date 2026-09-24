@@ -1,0 +1,145 @@
+# Image Mode for Red Hat Enterprise Linux using Bootc
+
+Image Mode is a modern approach to managing enterprise operating systems. It applies container concepts directly to the Linux host OS, treating the entire operating system as an OCI-compliant container image built from a `Containerfile`.
+
+`bootc` (Bootable Containers) is the core engine that enables transactional updates, rollback capabilities, and declarative management for host operating systems.
+
+---
+
+## Operating System as a Container Image
+
+Instead of managing RPM packages individually on every server, Image Mode packages the Linux kernel, systemd services, configuration defaults, and system binaries into a standard container image.
+
+```
+[ Containerfile ] ➔ [ Container Registry ] ➔ [ bootc Engine on Host ] ➔ [ Transactional Boot Deployment ]
+
+```
+
+### Key Differences: Traditional RHEL vs Image Mode
+
+* **Traditional RHEL:** Installed via Anaconda/Kickstart. Updated by modifying package sets on live systems using `dnf update`. Configurations drift over time.
+* **Image Mode RHEL:** Built via container build pipelines (`podman build`). Updated by replacing the OS layer with a new container tag (`bootc switch` / `bootc upgrade`). Highly immutable and reproducible.
+
+---
+
+## The Bootc Lifecycle Engine
+
+The `bootc` utility manages the transition between container image tags and physical boot deployments on local disk partitions.
+
+```
+[ New Image Tag ] ➔ [ bootc upgradeBootc (bootable container technology) allows you to build, deploy, and manage entire operating system images using standard container workflows and image registries (OCI images). 
+
+Using **Image Mode** with bootc means treating your host OS disk image just like a container image. You build your custom bootable OS using a standard Dockerfile or Containerfile, push it to a container registry, and deploy or update systems using `bootc`.
+
+Here is a quick guide on how image-mode bootc works and how to set up, build, and deploy an OS image using it.
+
+---
+
+## 1. Create a `Containerfile` (or `Dockerfile`)
+
+You start with a base bootc-compatible OS image (such as Red Hat Enterprise Linux Bootc or Fedora Bootc). You customize the system at image build time—installing packages, configuring services, and setting up users.
+
+```dockerfile
+# Start from a bootc-compatible base image
+FROM quay.io/fedora/fedora-bootc:40
+
+# Install required packages and system services
+RUN dnf install -y \
+    htop \
+    tmux \
+    nginx && \
+    dnf clean all
+
+# Enable a systemd service
+RUN systemctl enable nginx
+
+# Add standard configuration or scripts
+COPY ./config/nginx.conf /etc/nginx/nginx.conf
+
+# Bootc images automatically configure systemd as the entrypoint
+
+```
+
+---
+
+## 2. Build and Push the Image
+
+Build the container image using Podman or Docker, then push it to an OCI container registry (e.g., Quay.io, GitHub Container Registry, or a private registry).
+
+```bash
+# Build the bootc OS image
+podman build -t quay.io/myuser/custom-bootc-os:latest .
+
+# Push to your registry
+podman push quay.io/myuser/custom-bootc-os:latest
+
+```
+
+---
+
+## 3. Provisioning the Image to Disk
+
+To turn your container image into a real bootable disk image (e.g., ISO, QCOW2, RAW disk), use the `bootc-image-builder` container tool.
+
+### Generate a QCOW2 (for Virtual Machines):
+
+```bash
+podman run --rm -it --privileged \
+  -v /var/lib/containers/storage:/var/lib/containers/storage \
+  -v ./output:/output \
+  quay.io/centos-bootc/bootc-image-builder:latest \
+  --type qcow2 \
+  quay.io/myuser/custom-bootc-os:latest
+
+```
+
+### Supported Output Types:
+
+* **`qcow2`**: KVM/QEMU Virtual Machines
+* **`ami`**: AWS Amazon Machine Image
+* **`raw`**: Direct disk write (for bare-metal provisioning via `dd`)
+* **`iso`**: Bootable installer media
+
+---
+
+## 4. Managing Updates with `bootc`
+
+Once a system is running a bootc OS, managing and updating the OS is done directly using the `bootc` CLI tool on the target machine.
+
+* **Check current OS status:**
+```bash
+bootc status
+
+```
+
+
+* **Upgrade to a newer version of the image:**
+```bash
+# Pulls the latest version from the registry and sets it for the next reboot
+bootc upgrade
+
+```
+
+
+* **Switch/Rebase to a completely different container image:**
+```bash
+bootc switch quay.io/myuser/another-bootc-os:v2
+
+```
+
+
+* **Rollback to the previous working OS state:**
+```bash
+bootc rollback
+
+```
+
+
+
+---
+
+## Key Benefits of Bootc Image Mode
+
+1. **Transactional Updates:** Updates are applied atomically at build/registry level. If an update breaks, you simply reboot into the previous rollback deployment.
+2. **Standardized Tooling:** You manage the Operating System using the exact same CI/CD pipelines, security scanners, and container registries used for application container images.
+3. **Immutable Core:** The root filesystem is managed via `ostree` underneath, keeping the base system clean and reproducible across hundreds of bare-metal or VM deployments.
