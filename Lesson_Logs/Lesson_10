@@ -1,0 +1,73 @@
+# Managing Software and Updates
+
+Red Hat Enterprise Linux uses the DNF (Dandified YUM) package manager to install, update, query, and remove software. Packages are distributed as RPM files bundled with dependency metadata and hosted in remote or local software repositories.
+
+---
+
+## RPM and DNF Package Architecture
+
+Software management operates across two levels: low-level package manipulation and high-level dependency resolution.
+
+```
+[ Remote Repositories ] ➔ [ DNF Manager (Resolves Dependencies) ] ➔ [ RPM Engine ] ➔ [ System Files Installed ]
+
+```
+
+### Management Layers
+
+* **RPM (Red Hat Package Manager):** The core engine that handles individual `.rpm` binary packages. It handles installation and tracking on the local system but cannot resolve or download missing dependencies automatically.
+* **DNF (Dandified YUM):** The primary high-level package management tool in modern RHEL (RHEL 8/9+). DNF interacts with software repositories to automatically calculate, download, and install required dependencies.
+
+---
+
+## Managing Packages with DNF
+
+System administrators use `dnf` for day-to-day software maintenance and package lifecycle operations.
+
+```
+[ Admin Command ] ➔ [ dnf install / update / remove ] ➔ [ Repository Sync ] ➔ [ Action Executed ]
+
+```
+
+### Essential Package Commands
+
+* `dnf search keyword` searches repository package names and summaries for matching terms.
+* `dnf info packagename` displays detailed metadata about a package, including version, release, architecture, and description.
+* `dnf install packagename` downloads and installs a package along with all necessary dependencies.
+* `dnf update packagename` updates a specific package to the latest available version in the configured repositories.
+* `dnf remove packagename` uninstalls a package and removes its unused dependencies from the system.
+
+---
+
+## Managing System Updates and Security
+
+System updates patch software vulnerabilities, fix bugs, and deliver system enhancements.
+
+```
+[ Security Advisories ] ➔ [ dnf check-update ] ➔ [ dnf update --security ] ➔ [ System Patched ]
+
+```
+
+### Update Operations
+
+* `dnf check-update` scans configured repositories and lists all installed packages that have newer versions available.
+* `dnf update` updates all installed software packages on the operating system to their latest versions.
+* `dnf update --security` restricts software updates specifically to patches classified as security advisories, minimizing changes to production systems.
+
+---
+
+## Managing Software Repositories and Groups
+
+Repositories supply software packages, while package groups allow installing related server roles with a single command.
+
+```
+[ Repository Configuration File: /etc/yum.repos.d/ ] ➔ [ dnf repolist ] ➔ [ Active Package Sources ]
+
+```
+
+### Repository and Group Utilities
+
+* Configuration files for repositories are stored in the `/etc/yum.repos.d/` directory with the `.repo` extension.
+* `dnf repolist` lists all currently active and enabled software repositories on the system.
+* `dnf group list` displays pre-defined collections of software packages (e.g., "Development Tools" or "Web Server").
+* `dnf groupinstall "Group Name"` installs all software components bundled within a specified package group.
